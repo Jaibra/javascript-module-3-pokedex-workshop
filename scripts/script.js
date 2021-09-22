@@ -25,8 +25,9 @@ async function createPokemon(name, url) {
 
 
 function searchPokemon(event) {
-  if (event.code === "Enter") {
-    const term=event.target.value;
+  console.log(event)
+  if (event.code === "Enter" || event.type === "click") {
+    const term=document.getElementById("searchField").value;
     const url = `https://pokeapi.co/api/v2/pokemon/${term}`;
     const root = document.getElementById("root");
     root.innerHTML=''
@@ -40,17 +41,30 @@ function searchPokemon(event) {
 
 function createSearchField() {
   const searchField = document.createElement("input")
+  searchField.id = "searchField"
   searchField.type="text"
   searchField.placeholder="Search"
   searchField.addEventListener("keyup", searchPokemon)
   return searchField;
 }
 
+ const createButton = () => {
+  const button = document.createElement("button")
+  button.appendChild(document.createTextNode("Search"))
+  button.onclick = searchPokemon;
+  return button;
+}
+
+
+
 
 async function init() {
   const root = document.getElementById("root");
+  const searchField = createSearchField();
 
-  document.body.insertBefore(createSearchField(), root)
+
+  document.body.insertBefore(searchField, root)
+  searchField.insertAdjacentElement("afterend", createButton())
 
   const pokemon = await getAllPokemon();
 
